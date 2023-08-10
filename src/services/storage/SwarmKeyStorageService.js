@@ -3,7 +3,6 @@ import { generateKey } from 'libp2p/pnet';
 import { toString as uint8ArrayToString } from "uint8arrays";
 
 import { StorageService } from './StorageService.js';
-import { LogUtil } from "../../utils/LogUtil.js";
 import { TypeUtil } from "../../utils/TypeUtil.js";
 
 
@@ -140,8 +139,7 @@ export class SwarmKeyStorageService
 				const swarmKeyFilename = filename || SwarmKeyStorageService.getDefaultFilename();
 				if ( ! fs.existsSync( swarmKeyFilename ) )
 				{
-					LogUtil.debug( `swarmKey file not found : ${ swarmKeyFilename }` );
-					return resolve( null );
+					return reject( `swarmKey file not found : ${ swarmKeyFilename }` );
 				}
 
 				//	...
@@ -150,8 +148,7 @@ export class SwarmKeyStorageService
 					0 === data.byteLength ||
 					0 === data.length )
 				{
-					LogUtil.debug( `invalid swarmKey file` );
-					return resolve( null );
+					return resolve( `invalid swarmKey file` );
 				}
 
 				resolve( data );
