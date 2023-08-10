@@ -17,6 +17,20 @@ export class SwarmKeyStorageService
 	}
 
 	/**
+	 *	@param filename
+	 *	@returns {*|string}
+	 */
+	static getSafeFilename( filename )
+	{
+		if ( ! filename || ! TypeUtil.isNotEmptyString( filename ) )
+		{
+			return SwarmKeyStorageService.getDefaultFilename();
+		}
+
+		return filename;
+	}
+
+	/**
 	 *	@param obj
 	 *	@returns {boolean}
 	 */
@@ -85,33 +99,45 @@ export class SwarmKeyStorageService
 	 */
 	static async flushSwarmKey( filename )
 	{
-		try
+		return new Promise( async ( resolve, reject ) =>
 		{
-			//	try load from local file .swarmKey
-			const swarmKey = await SwarmKeyStorageService.loadSwarmKey( filename );
-			if ( swarmKey )
+			try
 			{
-				return swarmKey;
+				filename = SwarmKeyStorageService.getSafeFilename( filename );
+
+				try
+				{
+					//	try load from local file .swarmKey
+					const swarmKey = await SwarmKeyStorageService.loadSwarmKey( filename );
+					if ( swarmKey )
+					{
+						return resolve( swarmKey );
+					}
+				}
+				catch ( err )
+				{
+					//	do nothing
+				}
+
+				//
+				//	generate a new swarmKey
+				//
+				const writer = fs.createWriteStream( filename, {
+					encoding : "utf8",
+					flag : "w",
+					mode : 0o666
+				} );
+				generateKey( writer );
+				writer.close();
+
+				//	load and return
+				resolve( await SwarmKeyStorageService.loadSwarmKey( filename ) );
 			}
-		}
-		catch ( err )
-		{
-			//	do nothing
-		}
-
-		//
-		//	generate a new swarmKey
-		//
-		const writer = fs.createWriteStream( SwarmKeyStorageService.getDefaultFilename(), {
-			encoding : "utf8",
-			flag : "w",
-			mode : 0o666
-		} );
-		generateKey( writer );
-		writer.close();
-
-		//	load and return
-		return await SwarmKeyStorageService.loadSwarmKey( filename );
+			catch ( err )
+			{
+				reject( err );
+			}
+		});
 	}
 
 	/**
@@ -124,6 +150,9 @@ export class SwarmKeyStorageService
 		{
 			try
 			{
+				filename = SwarmKeyStorageService.getSafeFilename( filename );
+
+				//	...
 				const swarmKey = await this.loadSwarmKey( filename );
 				const swarmObject = this.swarmKeyToObject( swarmKey );
 				resolve( swarmObject );
@@ -145,14 +174,14 @@ export class SwarmKeyStorageService
 		{
 			try
 			{
-				const swarmKeyFilename = filename || SwarmKeyStorageService.getDefaultFilename();
-				if ( ! fs.existsSync( swarmKeyFilename ) )
+				filename = SwarmKeyStorageService.getSafeFilename( filename );
+				if ( ! fs.existsSync( filename ) )
 				{
-					return reject( `swarmKey file not found : ${ swarmKeyFilename }` );
+					return reject( `swarmKey file not found : ${ filename }` );
 				}
 
 				//	...
-				const data = await StorageService.loadDataFromFile( swarmKeyFilename );
+				const data = await StorageService.loadDataFromFile( filename );
 				if ( ! data instanceof Uint8Array ||
 					0 === data.byteLength ||
 					0 === data.length )
