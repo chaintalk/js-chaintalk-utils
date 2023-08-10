@@ -1,6 +1,5 @@
 import { createRSAPeerId } from '@libp2p/peer-id-factory'
 import { PeerIdStorageService } from "./storage/PeerIdStorageService.js";
-import { toString as uint8ArrayToString } from "uint8arrays/to-string";
 
 
 export class PeerIdService

@@ -39,4 +39,4 @@ async function swarmKeyFuncGenerator()
 }
 
 
-swarmKeyFuncGenerator().then( r => {} );
+swarmKeyFuncGenerator().then();

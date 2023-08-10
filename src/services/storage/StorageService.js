@@ -1,5 +1,5 @@
 import { fileURLToPath } from 'url';
-import { dirname, resolve } from 'path';
+import { dirname } from 'path';
 import { TypeUtil } from "../../utils/TypeUtil.js";
 import fs from "fs";
 

@@ -22,6 +22,11 @@ export class SwarmKeyService
 			{
 				const swarmKey = SwarmKeyService.generateSwarmKey();
 				const saved = await new SwarmKeyStorageService().saveSwarmKey( filename, swarmKey );
+				if ( ! saved )
+				{
+					return reject( `failed to save swarmKey` );
+				}
+
 				resolve( swarmKey );
 			}
 			catch ( err )

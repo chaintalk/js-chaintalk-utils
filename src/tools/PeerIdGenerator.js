@@ -39,4 +39,4 @@ async function peerIdFuncGenerator()
 }
 
 
-peerIdFuncGenerator().then( r => {} );
+peerIdFuncGenerator().then();
