@@ -105,23 +105,25 @@ export class SwarmKeyStorageService
 			{
 				filename = SwarmKeyStorageService.getSafeFilename( filename );
 
-				try
-				{
-					//	try load from local file .swarmKey
-					const swarmKey = await SwarmKeyStorageService.loadSwarmKey( filename );
-					if ( swarmKey )
-					{
-						return resolve( swarmKey );
-					}
-				}
-				catch ( err )
-				{
-					//	do nothing
-				}
+				// try
+				// {
+				// 	//	try load from local file .swarmKey
+				// 	const swarmKey = await SwarmKeyStorageService.loadSwarmKey( filename );
+				// 	if ( swarmKey )
+				// 	{
+				// 		return resolve( swarmKey );
+				// 	}
+				// }
+				// catch ( err )
+				// {
+				// 	//	do nothing
+				// }
 
 				//
 				//	generate a new swarmKey
 				//
+				//let buffer = new Uint8Array( 128 );
+				//generateKey( buffer );
 				const writer = fs.createWriteStream( filename, {
 					encoding : "utf8",
 					flag : "w",
@@ -183,10 +185,10 @@ export class SwarmKeyStorageService
 				//	...
 				const data = await StorageService.loadDataFromFile( filename );
 				if ( ! data instanceof Uint8Array ||
-					0 === data.byteLength ||
-					0 === data.length )
+				     0 === data.byteLength ||
+				     0 === data.length )
 				{
-					return resolve( `invalid swarmKey file` );
+					return reject( `invalid swarmKey file` );
 				}
 
 				resolve( data );
