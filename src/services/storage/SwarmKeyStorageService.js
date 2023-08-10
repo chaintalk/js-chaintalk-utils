@@ -9,16 +9,27 @@ import { TypeUtil } from "../../utils/TypeUtil.js";
 
 export class SwarmKeyStorageService
 {
-	static getSwarmKeyFilename()
+	/**
+	 *	@returns {string}
+	 */
+	static getDefaultFilename()
 	{
 		return `${ StorageService.getConfigDirectory() }/.swarmKey`;
 	}
 
-	static isValidSwarmObject( swarmKeyObject )
+	/**
+	 *	@param obj
+	 *	@returns {boolean}
+	 */
+	static isValidSwarmObject( obj )
 	{
-		return TypeUtil.isNotNullObjectWithKeys( swarmKeyObject, [ 'protocol', 'encode', 'key' ] );
+		return TypeUtil.isNotNullObjectWithKeys( obj, [ 'protocol', 'encode', 'key' ] );
 	}
 
+	/**
+	 *	@param swarmKey
+	 *	@returns {{encode: string, protocol: string, key: string}|null}
+	 */
 	static swarmKeyToObject( swarmKey )
 	{
 		if ( swarmKey instanceof Uint8Array )
@@ -51,7 +62,10 @@ export class SwarmKeyStorageService
 		}
 	}
 
-
+	/**
+	 *	@param swarmKey
+	 *	@returns { string | null }
+	 */
 	static swarmKeyToString( swarmKey )
 	{
 		try
@@ -62,20 +76,25 @@ export class SwarmKeyStorageService
 		{
 			console.error( err );
 		}
+
 		return null;
 	}
 
-	static async generateSwarmKey()
+	/**
+	 *	@param filename
+	 *	@returns {Promise<Uint8Array>}
+	 */
+	static async flushSwarmKey( filename )
 	{
 		//	load from local file .swarmKey
-		const swarmKey = await SwarmKeyStorageService.loadSwarmKey();
+		const swarmKey = await SwarmKeyStorageService.loadSwarmKey( filename );
 		if ( swarmKey )
 		{
 			return swarmKey;
 		}
 
 		//	generate a new swarmKey
-		const writer = fs.createWriteStream( SwarmKeyStorageService.getSwarmKeyFilename(), {
+		const writer = fs.createWriteStream( SwarmKeyStorageService.getDefaultFilename(), {
 			encoding : "utf8",
 			flag : "w",
 			mode : 0o666
@@ -84,9 +103,13 @@ export class SwarmKeyStorageService
 		writer.close();
 
 		//	load and return
-		return await SwarmKeyStorageService.loadSwarmKey();
+		return await SwarmKeyStorageService.loadSwarmKey( filename );
 	}
 
+	/**
+	 *	@param filename
+	 *	@returns {Promise<{encode: string, protocol: string, key: string}>}
+	 */
 	static async loadSwarmObject( filename )
 	{
 		return new Promise( async ( resolve, reject ) =>
@@ -114,7 +137,7 @@ export class SwarmKeyStorageService
 		{
 			try
 			{
-				const swarmKeyFilename = filename || SwarmKeyStorageService.getSwarmKeyFilename();
+				const swarmKeyFilename = filename || SwarmKeyStorageService.getDefaultFilename();
 				if ( ! fs.existsSync( swarmKeyFilename ) )
 				{
 					LogUtil.debug( `swarmKey file not found : ${ swarmKeyFilename }` );
