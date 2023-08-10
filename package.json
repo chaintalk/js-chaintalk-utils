@@ -1,9 +1,12 @@
 {
 	"name": "chaintalk-utils",
-	"version": "1.0.18",
+	"version": "1.0.19",
 	"description": "utils for ChainTalk",
 	"main": "src/index.js",
 	"scripts": {
+		"help": "node src/help.js",
+		"peer-id-generator": "node src/tools/PeerIdGenerator.js",
+		"swarm-key-generator": "node src/tools/SwarmKeyGenerator.js"
 	},
 	"type": "module",
 	"files": [

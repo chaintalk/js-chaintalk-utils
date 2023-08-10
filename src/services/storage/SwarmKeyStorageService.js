@@ -1,17 +1,19 @@
 import fs from 'fs';
-import { generateKey } from 'libp2p/pnet';
 import { toString as uint8ArrayToString } from "uint8arrays";
 
 import { StorageService } from './StorageService.js';
 import { TypeUtil } from "../../utils/TypeUtil.js";
 
 
+/**
+ * 	class SwarmKeyStorageService
+ */
 export class SwarmKeyStorageService
 {
 	/**
 	 *	@returns {string}
 	 */
-	static getDefaultFilename()
+	getDefaultFilename()
 	{
 		return `${ StorageService.getConfigDirectory() }/.swarmKey`;
 	}
@@ -20,30 +22,30 @@ export class SwarmKeyStorageService
 	 *	@param filename
 	 *	@returns {*|string}
 	 */
-	static getSafeFilename( filename )
+	getSafeFilename( filename )
 	{
 		if ( ! filename || ! TypeUtil.isNotEmptyString( filename ) )
 		{
-			return SwarmKeyStorageService.getDefaultFilename();
+			return this.getDefaultFilename();
 		}
 
 		return filename;
 	}
 
 	/**
-	 *	@param obj
+	 *	@param obj	{any}
 	 *	@returns {boolean}
 	 */
-	static isValidSwarmObject( obj )
+	isValidSwarmKeyObject( obj )
 	{
 		return TypeUtil.isNotNullObjectWithKeys( obj, [ 'protocol', 'encode', 'key' ] );
 	}
 
 	/**
-	 *	@param swarmKey
+	 *	@param swarmKey	{Uint8Array}
 	 *	@returns {{encode: string, protocol: string, key: string}|null}
 	 */
-	static swarmKeyToObject( swarmKey )
+	swarmKeyToObject( swarmKey )
 	{
 		if ( swarmKey instanceof Uint8Array )
 		{
@@ -76,13 +78,18 @@ export class SwarmKeyStorageService
 	}
 
 	/**
-	 *	@param swarmKey
+	 *	@param swarmKey	{Uint8Array}
 	 *	@returns { string | null }
 	 */
-	static swarmKeyToString( swarmKey )
+	swarmKeyToString( swarmKey )
 	{
 		try
 		{
+			if ( ! ( swarmKey instanceof Uint8Array ) )
+			{
+				return String( swarmKey );
+			}
+
 			return uint8ArrayToString( swarmKey );
 		}
 		catch ( err )
@@ -97,86 +104,13 @@ export class SwarmKeyStorageService
 	 *	@param filename
 	 *	@returns {Promise<Uint8Array>}
 	 */
-	static async flushSwarmKey( filename )
+	async loadSwarmKey( filename )
 	{
 		return new Promise( async ( resolve, reject ) =>
 		{
 			try
 			{
-				filename = SwarmKeyStorageService.getSafeFilename( filename );
-
-				// try
-				// {
-				// 	//	try load from local file .swarmKey
-				// 	const swarmKey = await SwarmKeyStorageService.loadSwarmKey( filename );
-				// 	if ( swarmKey )
-				// 	{
-				// 		return resolve( swarmKey );
-				// 	}
-				// }
-				// catch ( err )
-				// {
-				// 	//	do nothing
-				// }
-
-				//
-				//	generate a new swarmKey
-				//
-				//let buffer = new Uint8Array( 128 );
-				//generateKey( buffer );
-				const writer = fs.createWriteStream( filename, {
-					encoding : "utf8",
-					flag : "w",
-					mode : 0o666
-				} );
-				generateKey( writer );
-				writer.close();
-
-				//	load and return
-				resolve( await SwarmKeyStorageService.loadSwarmKey( filename ) );
-			}
-			catch ( err )
-			{
-				reject( err );
-			}
-		});
-	}
-
-	/**
-	 *	@param filename
-	 *	@returns {Promise<{encode: string, protocol: string, key: string}>}
-	 */
-	static async loadSwarmObject( filename )
-	{
-		return new Promise( async ( resolve, reject ) =>
-		{
-			try
-			{
-				filename = SwarmKeyStorageService.getSafeFilename( filename );
-
-				//	...
-				const swarmKey = await this.loadSwarmKey( filename );
-				const swarmObject = this.swarmKeyToObject( swarmKey );
-				resolve( swarmObject );
-			}
-			catch ( err )
-			{
-				reject( err );
-			}
-		} );
-	}
-
-	/**
-	 *	@param filename
-	 *	@returns {Promise<Uint8Array>}
-	 */
-	static async loadSwarmKey( filename )
-	{
-		return new Promise( async ( resolve, reject ) =>
-		{
-			try
-			{
-				filename = SwarmKeyStorageService.getSafeFilename( filename );
+				filename = this.getSafeFilename( filename );
 				if ( ! fs.existsSync( filename ) )
 				{
 					return reject( `swarmKey file not found : ${ filename }` );
@@ -198,5 +132,36 @@ export class SwarmKeyStorageService
 				reject( err );
 			}
 		} );
+	}
+
+	/**
+	 *	@param filename	{string}
+	 *	@param swarmKey	{Uint8Array}
+	 *	@returns {Promise<boolean>}
+	 */
+	async saveSwarmKey( filename, swarmKey )
+	{
+		return new Promise( async ( resolve, reject ) =>
+		{
+			try
+			{
+				if ( ! ( swarmKey instanceof Uint8Array ) )
+				{
+					return reject( `invalid swarmKey` );
+				}
+
+				filename = this.getSafeFilename( filename );
+				const saved = await StorageService.saveDataToFile( filename, swarmKey );
+				setTimeout( () =>
+				{
+					resolve( saved );
+
+				}, 300 );
+			}
+			catch ( err )
+			{
+				reject( err );
+			}
+		});
 	}
 }

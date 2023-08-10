@@ -11,10 +11,25 @@ import { TypeUtil } from '../../utils/TypeUtil.js';
  */
 export class PeerIdStorageService
 {
-	getFilename()
+	getDefaultFilename()
 	{
 		return `${ StorageService.getConfigDirectory() }/.peerId`;
 	}
+
+	/**
+	 *	@param filename
+	 *	@returns {*|string}
+	 */
+	getSafeFilename( filename )
+	{
+		if ( ! filename || ! TypeUtil.isNotEmptyString( filename ) )
+		{
+			return this.getDefaultFilename();
+		}
+
+		return filename;
+	}
+
 
 	/**
 	 *	@param rawPeerIdObject	- {PeerId}
@@ -68,7 +83,6 @@ export class PeerIdStorageService
 		});
 	}
 
-
 	isValidStoragePeerId( peerIdObject )
 	{
 		return TypeUtil.isNotNullObjectWithKeys( peerIdObject, [ 'id', 'privKey', 'pubKey' ] );
@@ -89,24 +103,24 @@ export class PeerIdStorageService
 		{
 			try
 			{
-				const peerIdDataFilename = filename || this.getFilename();
-				if ( ! fs.existsSync( peerIdDataFilename ) )
+				filename = this.getSafeFilename( filename );
+				if ( ! fs.existsSync( filename ) )
 				{
-					return resolve( `file not found : ${ peerIdDataFilename }` );
+					return resolve( `file not found : ${ filename }` );
 				}
 
-				const dataObject = await StorageService.loadDataFromFile( peerIdDataFilename );
+				const dataObject = await StorageService.loadDataFromFile( filename );
 				const jsonString = String( dataObject );
 				if ( 'string' !== typeof jsonString ||
 				     ! TypeUtil.isNotEmptyString( jsonString ) )
 				{
-					return reject( `empty content in file : ${ peerIdDataFilename }` );
+					return reject( `empty content in file : ${ filename }` );
 				}
 
 				const storagePeerIdObject = JSON.parse( jsonString );
 				if ( ! this.isValidStoragePeerId( storagePeerIdObject ) )
 				{
-					return reject( `invalid peerId in file : ${ peerIdDataFilename }` );
+					return reject( `invalid peerId in file : ${ filename }` );
 				}
 
 				return resolve( storagePeerIdObject );
@@ -117,7 +131,6 @@ export class PeerIdStorageService
 			}
 		} );
 	}
-
 
 	/**
 	 *	@param filename
@@ -149,10 +162,11 @@ export class PeerIdStorageService
 	}
 
 	/**
-	 *	@param	rawPeerIdObject		- {PeerId}
+	 *	@param filename			{string}
+	 *	@param	rawPeerIdObject		{PeerId}
 	 *	@returns {Promise<boolean>}
 	 */
-	savePeerId( rawPeerIdObject )
+	savePeerId( filename, rawPeerIdObject )
 	{
 		//
 		//	rawPeerIdObject:
@@ -172,9 +186,10 @@ export class PeerIdStorageService
 					return reject( `invalid rawPeerIdObject` );
 				}
 
+				filename = this.getSafeFilename( filename );
 				const peerIdObject = this.storagePeerIdFromRaw( rawPeerIdObject );
 				const peerIdJsonString = JSON.stringify( peerIdObject );
-				await StorageService.saveDataToFile( this.getFilename(), peerIdJsonString );
+				await StorageService.saveDataToFile( filename, peerIdJsonString );
 
 				//	...
 				resolve( true );

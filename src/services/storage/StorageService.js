@@ -22,6 +22,9 @@ export class StorageService
 		return __dirname;
 	}
 
+	/**
+	 *	@returns {string}
+	 */
 	static getConfigDirectory()
 	{
 		return `/etc/chaintalk`;
@@ -29,6 +32,11 @@ export class StorageService
 		// return resolve( srcDir, ".." );
 	}
 
+	/**
+	 * 	load data from local file
+	 * 	@param filename
+	 * 	@returns {Promise<string | Buffer>}
+	 */
 	static async loadDataFromFile( filename )
 	{
 		return new Promise( ( resolve, reject ) =>
@@ -58,6 +66,11 @@ export class StorageService
 		} );
 	}
 
+	/**
+	 *	@param filename
+	 *	@param data
+	 *	@returns {Promise<boolean>}
+	 */
 	static saveDataToFile( filename, data )
 	{
 		return new Promise( ( resolve, reject ) =>
@@ -69,6 +82,10 @@ export class StorageService
 					return reject( `invalid filename` );
 				}
 
+				//
+				//	filename	<string> | <Buffer> | <URL> | <integer> filename or file descriptor
+				//	data		<string> | <Buffer> | <TypedArray> | <DataView>
+				//
 				fs.writeFile( filename, data, {
 					encoding : "utf8",
 					flag : "w",

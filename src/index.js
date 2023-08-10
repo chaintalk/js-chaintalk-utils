@@ -9,4 +9,5 @@ export { PeerIdService }
 import { LogUtil } from "./utils/LogUtil.js";
 import { ObjectUtil } from "./utils/ObjectUtil.js";
 import { TypeUtil } from "./utils/TypeUtil.js";
-export { LogUtil, ObjectUtil, TypeUtil }
+import { BufferUtil } from "./utils/BufferUtil.js";
+export { LogUtil, ObjectUtil, TypeUtil, BufferUtil }

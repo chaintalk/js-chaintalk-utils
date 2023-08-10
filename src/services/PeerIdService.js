@@ -1,5 +1,6 @@
 import { createRSAPeerId } from '@libp2p/peer-id-factory'
 import { PeerIdStorageService } from "./storage/PeerIdStorageService.js";
+import { toString as uint8ArrayToString } from "uint8arrays/to-string";
 
 
 export class PeerIdService
@@ -21,15 +22,18 @@ export class PeerIdService
 	/**
 	 *	@returns {Promise<PeerId>}
 	 */
-	static async flushPeerId()
+	static async flushPeerId( filename )
 	{
 		return new Promise( async ( resolve, reject ) =>
 		{
 			try
 			{
-				const rawPeerIdObject = await this.generatePeerId();
-				await new PeerIdStorageService().savePeerId( rawPeerIdObject );
-				resolve( rawPeerIdObject );
+				//
+				//	export type PeerId = RSAPeerId | Ed25519PeerId | Secp256k1PeerId
+				//
+				const rsaPeerIdObject = await this.generatePeerId();
+				await new PeerIdStorageService().savePeerId( filename, rsaPeerIdObject );
+				resolve( rsaPeerIdObject );
 			}
 			catch ( err )
 			{
