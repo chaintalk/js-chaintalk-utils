@@ -85,14 +85,23 @@ export class SwarmKeyStorageService
 	 */
 	static async flushSwarmKey( filename )
 	{
-		//	load from local file .swarmKey
-		const swarmKey = await SwarmKeyStorageService.loadSwarmKey( filename );
-		if ( swarmKey )
+		try
 		{
-			return swarmKey;
+			//	try load from local file .swarmKey
+			const swarmKey = await SwarmKeyStorageService.loadSwarmKey( filename );
+			if ( swarmKey )
+			{
+				return swarmKey;
+			}
+		}
+		catch ( err )
+		{
+			//	do nothing
 		}
 
+		//
 		//	generate a new swarmKey
+		//
 		const writer = fs.createWriteStream( SwarmKeyStorageService.getDefaultFilename(), {
 			encoding : "utf8",
 			flag : "w",
