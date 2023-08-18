@@ -70,7 +70,7 @@ export class TypeUtil
 	 */
 	static isNumeric( str )
 	{
-		return 'number' === typeof str;
+		return 'number' === typeof str || 'bigint' === typeof str;
 	}
 
 	/**
