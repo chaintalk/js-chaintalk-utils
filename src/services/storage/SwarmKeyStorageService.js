@@ -19,7 +19,7 @@ export class SwarmKeyStorageService
 	}
 
 	/**
-	 *	@param filename {string}
+	 *	@param filename {string|null}
 	 *	@returns {string}
 	 */
 	getSafeFilename( filename )
@@ -113,7 +113,7 @@ export class SwarmKeyStorageService
 	}
 
 	/**
-	 *	@param filename {string}
+	 *	@param filename {string|null}
 	 *	@returns {Promise<Uint8Array>}
 	 */
 	async loadSwarmKey( filename )
@@ -147,7 +147,7 @@ export class SwarmKeyStorageService
 	}
 
 	/**
-	 *	@param filename	{string}
+	 *	@param filename	{string|null}
 	 *	@param swarmKey	{Uint8Array}
 	 *	@returns {Promise<boolean>}
 	 */

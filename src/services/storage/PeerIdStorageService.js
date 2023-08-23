@@ -27,8 +27,8 @@ export class PeerIdStorageService
 	}
 
 	/**
-	 *	@param filename {string}
-	 *	@returns {*|string}
+	 *	@param filename {string|null}
+	 *	@returns {string}
 	 */
 	getSafeFilename( filename )
 	{
@@ -113,7 +113,7 @@ export class PeerIdStorageService
 	}
 
 	/**
-	 *	@param	filename	{string}
+	 *	@param	filename	{string|null}
 	 *	@returns {Promise<{ id: string, privKey: string, pubKey: string }>}
 	 */
 	async loadStoragePeerId( filename )
@@ -181,7 +181,7 @@ export class PeerIdStorageService
 	}
 
 	/**
-	 *	@param filename			{string}
+	 *	@param filename			{string|null}
 	 *	@param	rawPeerIdObject		{PeerId}
 	 *	@returns {Promise<boolean>}
 	 */
