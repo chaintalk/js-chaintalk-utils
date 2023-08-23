@@ -1,8 +1,8 @@
 {
 	"name": "chaintalk-utils",
-	"version": "1.0.24",
+	"version": "1.0.25",
 	"description": "utils for ChainTalk",
-	"main": "dist/index.js",
+	"main": "src/index.js",
 	"scripts": {
 		"help": "node src/help.js",
 		"clean": "rm -rf dist",
