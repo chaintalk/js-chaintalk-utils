@@ -5,20 +5,41 @@ import { PeerIdStorageService } from "./storage/PeerIdStorageService.js";
 export class PeerIdService
 {
 	/**
-	 * 	@returns {Promise<RSAPeerId>}
+	 * @typedef {import('@libp2p/interface/peer-id').PeerId} PeerId
+	 * @typedef {import('@libp2p/interface/peer-id').RSAPeerId} RSAPeerId
+	 * @typedef {import('@libp2p/interface/peer-id').Ed25519PeerId} Ed25519PeerId
+	 * @typedef {import('@libp2p/interface/peer-id').Secp256k1PeerId} Secp256k1PeerId
+	 */
+
+	/**
+	 * @typedef {Object} HopRelayOptions
+	 * @property {PeerId} [peerId]
+	 * @property {string[]} [listenAddresses = []]
+	 * @property {string[]} [announceAddresses = []]
+	 * @property {boolean} [pubsubDiscoveryEnabled = true]
+	 * @property {string[]} [pubsubDiscoveryTopics = ['_peer-discovery._p2p._pubsub']] uses discovery default
+	 */
+
+
+	/**
+	 * 	@returns {Promise<PeerId>}
 	 */
 	static async generatePeerId()
 	{
-		//
-		//	readonly type: 'RSA'
-		//	readonly multihash: MultihashDigest
-		//	readonly privateKey?: Uint8Array
-		//	readonly publicKey?: Uint8Array
-		//
-		return await createRSAPeerId();
+		return new Promise( async ( resolve, reject ) =>
+		{
+			try
+			{
+				return await createRSAPeerId();
+			}
+			catch ( err )
+			{
+				reject( err );
+			}
+		});
 	}
-
 	/**
+	 *	@param {string} filename
 	 *	@returns {Promise<PeerId>}
 	 */
 	static async flushPeerId( filename )

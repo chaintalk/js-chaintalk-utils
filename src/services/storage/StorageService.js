@@ -1,27 +1,9 @@
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
 import { TypeUtil } from "../../utils/TypeUtil.js";
 import fs from "fs";
-
-/**
- * 	define constants
- */
-const __filename = fileURLToPath( import.meta.url );
-const __dirname = dirname( __filename );
 
 
 export class StorageService
 {
-	static get __filename()
-	{
-		return __filename;
-	}
-
-	static get __dirname()
-	{
-		return __dirname;
-	}
-
 	/**
 	 *	@returns {string}
 	 */
@@ -34,7 +16,7 @@ export class StorageService
 
 	/**
 	 * 	load data from local file
-	 * 	@param filename
+	 * 	@param filename {string}
 	 * 	@returns {Promise<string | Buffer>}
 	 */
 	static async loadDataFromFile( filename )
@@ -67,8 +49,8 @@ export class StorageService
 	}
 
 	/**
-	 *	@param filename
-	 *	@param data
+	 *	@param filename {string}
+	 *	@param data {any}
 	 *	@returns {Promise<boolean>}
 	 */
 	static saveDataToFile( filename, data )

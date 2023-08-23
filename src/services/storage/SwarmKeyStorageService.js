@@ -19,8 +19,8 @@ export class SwarmKeyStorageService
 	}
 
 	/**
-	 *	@param filename
-	 *	@returns {*|string}
+	 *	@param filename {string}
+	 *	@returns {string}
 	 */
 	getSafeFilename( filename )
 	{
@@ -47,16 +47,28 @@ export class SwarmKeyStorageService
 	 */
 	swarmKeyToObject( swarmKey )
 	{
+		/**
+		 *	@type {string | null}
+		 */
+		let swarmKeyString = '';
+
 		if ( swarmKey instanceof Uint8Array )
 		{
-			swarmKey = this.swarmKeyToString( swarmKey );
+			swarmKeyString = this.swarmKeyToString( swarmKey );
 		}
-		if ( ! TypeUtil.isNotEmptyString( swarmKey ) )
+		else if ( TypeUtil.isNotEmptyString( swarmKey ) )
+		{
+			swarmKeyString = swarmKey;
+		}
+
+		if ( ! swarmKeyString ||
+		     ! TypeUtil.isNotEmptyString( swarmKeyString ) )
 		{
 			return null;
 		}
 
-		const lines = swarmKey.split( /\r?\n/ );
+		//	...
+		const lines = swarmKeyString.split( /\r?\n/ );
 		if ( ! Array.isArray( lines ) || lines.length < 3 )
 		{
 			return null;
@@ -101,7 +113,7 @@ export class SwarmKeyStorageService
 	}
 
 	/**
-	 *	@param filename
+	 *	@param filename {string}
 	 *	@returns {Promise<Uint8Array>}
 	 */
 	async loadSwarmKey( filename )
@@ -118,7 +130,7 @@ export class SwarmKeyStorageService
 
 				//	...
 				const data = await StorageService.loadDataFromFile( filename );
-				if ( ! data instanceof Uint8Array ||
+				if ( ! ( data instanceof Uint8Array ) ||
 				     0 === data.byteLength ||
 				     0 === data.length )
 				{

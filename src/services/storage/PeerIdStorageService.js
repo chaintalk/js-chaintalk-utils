@@ -5,19 +5,29 @@ import { createFromJSON } from '@libp2p/peer-id-factory'
 import { StorageService } from './StorageService.js';
 import { TypeUtil } from '../../utils/TypeUtil.js';
 
-
 /**
  * 	class PeerIdStorageService
  */
 export class PeerIdStorageService
 {
+	/**
+	 * @typedef {import('@libp2p/interface/peer-id').PeerId} PeerId
+	 * @typedef {import('@libp2p/interface/peer-id').RSAPeerId} RSAPeerId
+	 * @typedef {import('@libp2p/interface/peer-id').Ed25519PeerId} Ed25519PeerId
+	 * @typedef {import('@libp2p/interface/peer-id').Secp256k1PeerId} Secp256k1PeerId
+	 */
+
+
+	/**
+	 *	@return {string}
+	 */
 	getDefaultFilename()
 	{
 		return `${ StorageService.getConfigDirectory() }/.peerId`;
 	}
 
 	/**
-	 *	@param filename
+	 *	@param filename {string}
 	 *	@returns {*|string}
 	 */
 	getSafeFilename( filename )
@@ -30,14 +40,17 @@ export class PeerIdStorageService
 		return filename;
 	}
 
-
 	/**
-	 *	@param rawPeerIdObject	- {PeerId}
-	 *	@returns {{privKey: string, id: string, pubKey: string}|null}
+     	 *	@param peerIdObject {PeerId}
+	 *	@returns {{privKey: string;id: string;pubKey: string;} | null}
 	 */
-	storagePeerIdFromRaw( rawPeerIdObject )
+	storagePeerIdFromRaw( peerIdObject )
 	{
-		if ( ! this.isValidPeerId( rawPeerIdObject ) )
+		if ( ! this.isValidPeerId( peerIdObject ) )
+		{
+			return null;
+		}
+		if ( ! peerIdObject.privateKey || ! peerIdObject.publicKey )
 		{
 			return null;
 		}
@@ -46,9 +59,9 @@ export class PeerIdStorageService
 		{
 			//	convert to storage format
 			return {
-				id: uint8ArrayToString( rawPeerIdObject.multihash.bytes, 'base58btc' ),
-				privKey: uint8ArrayToString( rawPeerIdObject.privateKey, 'base64pad' ),
-				pubKey: uint8ArrayToString( rawPeerIdObject.publicKey, 'base64pad' )
+				id: uint8ArrayToString( peerIdObject.multihash.bytes, 'base58btc' ),
+				privKey: uint8ArrayToString( peerIdObject.privateKey, 'base64pad' ),
+				pubKey: uint8ArrayToString( peerIdObject.publicKey, 'base64pad' )
 			};
 		}
 		catch ( err ) {}
@@ -83,11 +96,17 @@ export class PeerIdStorageService
 		});
 	}
 
+	/**
+	 *	@param peerIdObject {any}
+     	 */
 	isValidStoragePeerId( peerIdObject )
 	{
 		return TypeUtil.isNotNullObjectWithKeys( peerIdObject, [ 'id', 'privKey', 'pubKey' ] );
 	}
 
+	/**
+	 *	@param peerIdObject {any}
+	 */
 	isValidPeerId( peerIdObject )
 	{
 		return TypeUtil.isNotNullObjectWithKeys( peerIdObject, [ 'type', 'multihash', 'privateKey', 'publicKey' ] );
@@ -106,7 +125,7 @@ export class PeerIdStorageService
 				filename = this.getSafeFilename( filename );
 				if ( ! fs.existsSync( filename ) )
 				{
-					return resolve( `file not found : ${ filename }` );
+					return reject( `file not found : ${ filename }` );
 				}
 
 				const dataObject = await StorageService.loadDataFromFile( filename );
@@ -133,7 +152,7 @@ export class PeerIdStorageService
 	}
 
 	/**
-	 *	@param filename
+	 *	@param filename	{string}
 	 *	@returns {Promise<PeerId>}
 	 */
 	async loadPeerId( filename )

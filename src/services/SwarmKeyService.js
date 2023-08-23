@@ -14,6 +14,9 @@ export class SwarmKeyService
 		return BufferUtil.trimZeroOfUint8Array( buffer );
 	}
 
+	/**
+	 *	@param filename {string}
+	 */
 	static async flushSwarmKey( filename )
 	{
 		return new Promise( async ( resolve, reject ) =>

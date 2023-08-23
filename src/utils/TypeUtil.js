@@ -29,7 +29,7 @@ export class TypeUtil
 
 	/**
 	 *	@param data	{any}
-	 *	@param keys	{Array}
+	 *	@param keys	{Array<string>}
 	 *	@returns {boolean}
 	 */
 	static isNotNullObjectWithKeys( data, keys )
@@ -59,8 +59,8 @@ export class TypeUtil
 	static instanceOfWxEncryptedData( data )
 	{
 		return this.isNotNullObjectWithKeys( data, [ 'encryptedData', 'iv' ] ) &&
-			'string' === typeof data.encryptedData &&
-			'string' === typeof data.iv
+		       'string' === typeof data.encryptedData &&
+		       'string' === typeof data.iv
 			;
 	}
 
@@ -120,7 +120,7 @@ export class TypeUtil
 	}
 
 	/**
-	 *	@param str
+	 *	@param str {any}
 	 *	@returns {boolean}
 	 */
 	static isNotEmptyString( str )
@@ -168,7 +168,7 @@ export class TypeUtil
 		}
 		else if ( Array.isArray( object ) )
 		{
-			return  object.length;
+			return object.length;
 		}
 
 		return 0;

@@ -15,27 +15,49 @@ export class LogUtil
 		LogUtil.logLevel = LogUtil.LEVEL_DEBUG;
 	}
 
+	/**
+	 *	@param args {any[]}
+	 */
 	static debug( ...args )
 	{
 		this.output( LogUtil.LEVEL_DEBUG, args );
 	}
+
+	/**
+	 *	@param args {any[]}
+	 */
 	static info( ...args )
 	{
 		this.output( LogUtil.LEVEL_INFO, args );
 	}
+
+	/**
+	 *	@param args {any[]}
+	 */
 	static warn( ...args )
 	{
 		this.output( LogUtil.LEVEL_WARNING, args );
 	}
+
+	/**
+	 *	@param args {any[]}
+	 */
 	static error( ...args )
 	{
 		this.output( LogUtil.LEVEL_ERROR, args );
 	}
+
+	/**
+	 *	@param args {any[]}
+	 */
 	static fatal( ...args )
 	{
 		this.output( LogUtil.LEVEL_FATAL, args );
 	}
 
+	/**
+	 *	@param args {any[]}
+	 */
 	static say( ...args )
 	{
 		for ( const arg of args )
@@ -44,6 +66,10 @@ export class LogUtil
 		}
 	}
 
+	/**
+	 *	@param args {any[]}
+	 *	@param level {number}
+	 */
 	static output( level, ...args )
 	{
 		if ( level >= LogUtil.logLevel )

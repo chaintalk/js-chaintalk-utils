@@ -36,6 +36,8 @@ async function peerIdFuncGenerator()
 		console.log( `------------------------------------------------------------` )
 
 	}, 100 );
+
+	return true;
 }
 
 

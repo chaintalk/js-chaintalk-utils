@@ -2,6 +2,10 @@ import { TypeUtil } from "./TypeUtil.js";
 
 export class ObjectUtil
 {
+	/**
+	 *	@param object {any}
+	 *	@param keyChain {string}
+	 */
 	static deepGet( object, keyChain )
 	{
 		if ( ! TypeUtil.isNotNullObject( object ) )

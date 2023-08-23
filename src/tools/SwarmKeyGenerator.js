@@ -36,6 +36,8 @@ async function swarmKeyFuncGenerator()
 		console.log( `------------------------------------------------------------` )
 
 	}, 100 );
+
+	return true;
 }
 
 
