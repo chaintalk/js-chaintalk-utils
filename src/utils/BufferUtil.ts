@@ -8,8 +8,14 @@ export class BufferUtil
 	 *	@param trimLeft {boolean}
 	 *	@param trimRight {boolean}
 	 */
-	static trimZeroOfUint8Array( arr, trimLeft = true, trimRight = true )
+	public static trimZeroOfUint8Array
+	(
+		arr : Uint8Array,
+		trimLeft : boolean = true,
+		trimRight : boolean = true
+	) : Uint8Array | null
 	{
+		//	...
 		let start = 0;
 		let end = arr.length - 1;
 

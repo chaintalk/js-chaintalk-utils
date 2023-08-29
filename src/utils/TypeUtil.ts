@@ -4,7 +4,7 @@ export class TypeUtil
 	 *	@param data	{any}
 	 *	@returns {boolean}
 	 */
-	static isObject( data )
+	public static isObject( data : any ) : boolean
 	{
 		const typeOfData = typeof data;
 		if ( 'object' !== typeOfData )
@@ -18,7 +18,7 @@ export class TypeUtil
 	 *	@param data	{any}
 	 *	@returns {boolean}
 	 */
-	static isNotNullObject( data )
+	public static isNotNullObject( data : null ) : boolean
 	{
 		if ( ! this.isObject( data ) )
 		{
@@ -32,7 +32,7 @@ export class TypeUtil
 	 *	@param keys	{Array<string>}
 	 *	@returns {boolean}
 	 */
-	static isNotNullObjectWithKeys( data, keys )
+	public static isNotNullObjectWithKeys( data : any, keys : string[] ) : boolean
 	{
 		if ( ! this.isNotNullObject( data ) )
 		{
@@ -56,11 +56,12 @@ export class TypeUtil
 	 *	@param data	{any}
 	 *	@returns {boolean}
 	 */
-	static instanceOfWxEncryptedData( data )
+	public static instanceOfWxEncryptedData( data : any ) : boolean
 	{
-		return this.isNotNullObjectWithKeys( data, [ 'encryptedData', 'iv' ] ) &&
-		       'string' === typeof data.encryptedData &&
-		       'string' === typeof data.iv
+		return data &&
+			this.isNotNullObjectWithKeys( data, [ 'encryptedData', 'iv' ] ) &&
+		       'string' === typeof data[ 'encryptedData' ] &&
+		       'string' === typeof data[ 'iv' ]
 			;
 	}
 
@@ -68,7 +69,7 @@ export class TypeUtil
 	 *	@param str	{any}
 	 *	@returns {boolean}
 	 */
-	static isNumeric( str )
+	public static isNumeric( str : any ) : boolean
 	{
 		return 'number' === typeof str || 'bigint' === typeof str;
 	}
@@ -77,7 +78,7 @@ export class TypeUtil
 	 *	@param obj	{any}
 	 *	@returns {number}
 	 */
-	static getIntValue( obj )
+	public static getIntValue( obj : any ) : number
 	{
 		if ( this.isNumeric( obj ) || this.isString( obj ) )
 		{
@@ -91,7 +92,7 @@ export class TypeUtil
 	 *	@param obj	{any}
 	 *	@returns {number}
 	 */
-	static getFloatValue( obj )
+	public static getFloatValue( obj : any ) : number
 	{
 		if ( this.isNumeric( obj ) || this.isString( obj ) )
 		{
@@ -105,7 +106,7 @@ export class TypeUtil
 	 *	@param str	{any}
 	 *	@returns {boolean}
 	 */
-	static isString( str )
+	public static isString( str : any ) : boolean
 	{
 		return 'string' === typeof str;
 	}
@@ -114,7 +115,7 @@ export class TypeUtil
 	 *	@param str	{any}
 	 *	@returns {boolean}
 	 */
-	static isFunction( str )
+	public static isFunction( str : any ) : boolean
 	{
 		return 'function' === typeof str;
 	}
@@ -123,7 +124,7 @@ export class TypeUtil
 	 *	@param str {any}
 	 *	@returns {boolean}
 	 */
-	static isNotEmptyString( str )
+	public static isNotEmptyString( str : string ) : boolean
 	{
 		//	允许空格
 		return this.getStringLength( str ) > 0;
@@ -133,7 +134,7 @@ export class TypeUtil
 	 *	@param str	{any}
 	 *	@returns {string}
 	 */
-	static nullToEmpty( str )
+	public static nullToEmpty( str : string ) : string
 	{
 		if ( this.isNotEmptyString( str ) )
 		{
@@ -147,7 +148,7 @@ export class TypeUtil
 	 *	@param str	{any}
 	 *	@returns {number}
 	 */
-	static getStringLength( str )
+	public static getStringLength( str : any ) : number
 	{
 		return this.isString( str ) ? str.length : 0;
 	}
@@ -156,7 +157,7 @@ export class TypeUtil
 	 *	@param object	{any}
 	 *	@returns {*|number}
 	 */
-	static getObjectLength( object )
+	public static getObjectLength( object : any ) : number
 	{
 		if ( 'string' === typeof object )
 		{

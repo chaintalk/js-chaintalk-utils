@@ -1,4 +1,4 @@
-import { TypeUtil } from "./TypeUtil.js";
+import { TypeUtil } from "./TypeUtil";
 
 export class ObjectUtil
 {
@@ -6,7 +6,7 @@ export class ObjectUtil
 	 *	@param object {any}
 	 *	@param keyChain {string}
 	 */
-	static deepGet( object, keyChain )
+	public static deepGet( object: any, keyChain: string ) : any | null
 	{
 		if ( ! TypeUtil.isNotNullObject( object ) )
 		{

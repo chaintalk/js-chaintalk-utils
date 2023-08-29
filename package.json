@@ -1,22 +1,21 @@
 {
 	"name": "chaintalk-utils",
-	"version": "1.0.25",
+	"version": "1.0.27",
 	"description": "utils for ChainTalk",
-	"main": "src/index.js",
+	"main": "dist/index.js",
+	"browser": "dist/index.js",
 	"scripts": {
-		"help": "node src/help.js",
+		"help": "node src/help.ts",
 		"clean": "rm -rf dist",
 		"build": "npm run clean && tsc",
-		"peer-id-generator": "node src/tools/PeerIdGenerator.js",
-		"swarm-key-generator": "node src/tools/SwarmKeyGenerator.js"
+		"test": "jest"
 	},
-	"type": "module",
+	"license": "MIT",
 	"files": [
 		"src",
 		"dist"
 	],
 	"author": "ChainTalk, Team.",
-	"license": "ISC",
 	"homepage": "https://github.com/chaintalk/",
 	"dependencies": {
 		"@chainsafe/libp2p-noise": "^13.0.0",

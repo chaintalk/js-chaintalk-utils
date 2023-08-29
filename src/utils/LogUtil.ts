@@ -1,13 +1,13 @@
 export class LogUtil
 {
-	static LEVEL_DEBUG	= 0;
-	static LEVEL_INFO	= 1;
-	static LEVEL_WARNING	= 2;
-	static LEVEL_ERROR	= 3;
-	static LEVEL_FATAL	= 4;
+	public static LEVEL_DEBUG	= 0;
+	public static LEVEL_INFO	= 1;
+	public static LEVEL_WARNING	= 2;
+	public static LEVEL_ERROR	= 3;
+	public static LEVEL_FATAL	= 4;
 
 	//	define log level
-	static logLevel		= this.LEVEL_DEBUG;
+	public static logLevel		= this.LEVEL_DEBUG;
 
 	constructor()
 	{
@@ -18,7 +18,7 @@ export class LogUtil
 	/**
 	 *	@param args {any[]}
 	 */
-	static debug( ...args )
+	public static debug( ...args: any[] ) : void
 	{
 		this.output( LogUtil.LEVEL_DEBUG, args );
 	}
@@ -26,7 +26,7 @@ export class LogUtil
 	/**
 	 *	@param args {any[]}
 	 */
-	static info( ...args )
+	public static info( ...args: any[] ) : void
 	{
 		this.output( LogUtil.LEVEL_INFO, args );
 	}
@@ -34,7 +34,7 @@ export class LogUtil
 	/**
 	 *	@param args {any[]}
 	 */
-	static warn( ...args )
+	public static warn( ...args: any[] ) : void
 	{
 		this.output( LogUtil.LEVEL_WARNING, args );
 	}
@@ -42,7 +42,7 @@ export class LogUtil
 	/**
 	 *	@param args {any[]}
 	 */
-	static error( ...args )
+	public static error( ...args: any[] ) : void
 	{
 		this.output( LogUtil.LEVEL_ERROR, args );
 	}
@@ -50,7 +50,7 @@ export class LogUtil
 	/**
 	 *	@param args {any[]}
 	 */
-	static fatal( ...args )
+	public static fatal( ...args: any[] ) : void
 	{
 		this.output( LogUtil.LEVEL_FATAL, args );
 	}
@@ -58,7 +58,7 @@ export class LogUtil
 	/**
 	 *	@param args {any[]}
 	 */
-	static say( ...args )
+	public static say( ...args: any[] ) : void
 	{
 		for ( const arg of args )
 		{
@@ -70,7 +70,7 @@ export class LogUtil
 	 *	@param args {any[]}
 	 *	@param level {number}
 	 */
-	static output( level, ...args )
+	public static output( level: number, ...args: any[][] ) : void
 	{
 		if ( level >= LogUtil.logLevel )
 		{
@@ -93,7 +93,6 @@ export class LogUtil
 						console.log( `⏰ ${ new Date() } : ` );
 						console.log( arg[ 0 ] );
 				}
-
 			}
 		}
 	}
