@@ -13,9 +13,9 @@ export class PageUtil
 	 *	@param defaultValue	{number}
 	 *	@returns {number}
 	 */
-	public static getSafePageNo( pageNo : number, defaultValue ?: number ) : number
+	public static getSafePageNo( pageNo ?: number, defaultValue ?: number ) : number
 	{
-		if ( pageNo > 0 )
+		if ( undefined !== pageNo && pageNo > 0 )
 		{
 			return pageNo;
 		}
@@ -33,9 +33,9 @@ export class PageUtil
 	 *	@param defaultValue	{number}
 	 *	@returns {number}
 	 */
-	public static getSafePageSize( pageSize : number, defaultValue ?: number ) : number
+	public static getSafePageSize( pageSize ?: number, defaultValue ?: number ) : number
 	{
-		if ( this.isValidPageSize( pageSize ) )
+		if ( undefined !== pageSize && this.isValidPageSize( pageSize ) )
 		{
 			return pageSize;
 		}
@@ -53,7 +53,7 @@ export class PageUtil
 	 */
 	public static isValidPageSize( value : any ) : boolean
 	{
-		if ( undefined !== value || ! TypeUtil.isNumeric( value ) )
+		if ( ! TypeUtil.isNumeric( value ) )
 		{
 			return false;
 		}
