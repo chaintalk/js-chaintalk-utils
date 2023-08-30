@@ -1,6 +1,6 @@
 {
 	"name": "chaintalk-utils",
-	"version": "1.0.30",
+	"version": "1.0.31",
 	"description": "utils for ChainTalk",
 	"main": "dist/index.js",
 	"browser": "dist/index.js",
