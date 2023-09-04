@@ -124,7 +124,7 @@ export class TypeUtil
 	 *	@param str {any}
 	 *	@returns {boolean}
 	 */
-	public static isNotEmptyString( str : string ) : boolean
+	public static isNotEmptyString( str : any ) : boolean
 	{
 		//	允许空格
 		return this.getStringLength( str ) > 0;
@@ -134,7 +134,7 @@ export class TypeUtil
 	 *	@param str	{any}
 	 *	@returns {string}
 	 */
-	public static nullToEmpty( str : string ) : string
+	public static nullToEmpty( str : any ) : string
 	{
 		if ( this.isNotEmptyString( str ) )
 		{
