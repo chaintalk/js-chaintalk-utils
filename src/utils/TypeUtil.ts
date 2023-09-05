@@ -18,7 +18,7 @@ export class TypeUtil
 	 *	@param data	{any}
 	 *	@returns {boolean}
 	 */
-	public static isNotNullObject( data : null ) : boolean
+	public static isNotNullObject( data : any ) : boolean
 	{
 		if ( ! this.isObject( data ) )
 		{
