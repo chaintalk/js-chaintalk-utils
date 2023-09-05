@@ -1,4 +1,3 @@
-import { unwatchFile } from "fs";
 import { TestUtil } from "./TestUtil";
 
 export class LogUtil
