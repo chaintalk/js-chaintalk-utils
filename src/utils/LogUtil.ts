@@ -1,3 +1,6 @@
+import { unwatchFile } from "fs";
+import { TestUtil } from "./TestUtil";
+
 export class LogUtil
 {
 	public static LEVEL_DEBUG	= 0;
@@ -72,6 +75,12 @@ export class LogUtil
 	 */
 	public static output( level: number, ...args: any[][] ) : void
 	{
+		if ( TestUtil.isTestEnv() )
+		{
+			//	output nothing in test env
+			return;
+		}
+
 		if ( level >= LogUtil.logLevel )
 		{
 			//	使用剩余参数数组
