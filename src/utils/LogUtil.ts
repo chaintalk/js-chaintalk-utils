@@ -80,18 +80,14 @@ export class LogUtil
 				switch ( level )
 				{
 					case LogUtil.LEVEL_WARNING:
-						console.warn( new Date() );
-						console.warn( arg[ 0 ] );
+						console.warn( `[${ new Date() }] : `, arg[ 0 ] );
 						break;
 					case LogUtil.LEVEL_ERROR:
 					case LogUtil.LEVEL_FATAL:
-						console.error( new Date() );
-						console.error( arg[ 0 ] );
+						console.error( `[${ new Date() }] : `, arg[ 0 ] );
 						break;
 					default:
-						console.log( `` );
-						console.log( `⏰ ${ new Date() } : ` );
-						console.log( arg[ 0 ] );
+						console.log( `[${ new Date() }] : `, arg[ 0 ] );
 				}
 			}
 		}
